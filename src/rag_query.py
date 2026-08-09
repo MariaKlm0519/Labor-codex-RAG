@@ -38,9 +38,6 @@ class CodexRag:
         self.bm25 = BM25Okapi(tokenized)
 
     def transform_query(self, user_query: str) -> str:
-        """Переформулирует бытовой вопрос в юридическую терминологию ТК РФ,
-        чтобы улучшить качество поиска. Используется ТОЛЬКО для retrieval,
-        не для генерации финального ответа."""
         system_prompt = (
             "Пользователь задал вопрос по трудовому праву. "
     "Напиши короткий абзац (3-5 предложений) в стиле нормативного текста, "
@@ -66,7 +63,7 @@ class CodexRag:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_query},
             ],
-            max_tokens=80,
+            max_tokens=200,
             temperature=0.1,
         )
         return response.choices[0].message.content.strip()
@@ -107,7 +104,6 @@ class CodexRag:
 
         combined = [(v["chunk"], v["score"]) for v in score_dict.values()]
 
-        # === АГРЕГАЦИЯ ПО СТАТЬЯМ ===
         article_scores = defaultdict(list)
         article_examples = {}
 
@@ -168,7 +164,7 @@ def build_prompt(query: str, results: List[Dict]) -> str:
     return f"""КОНТЕКСТ:{context}
     ВОПРОС:{query}"""
 
-def main():
+def cli_rag():
     rag = CodexRag()
     while True:
         print("Введите вопрос:")
@@ -178,19 +174,16 @@ def main():
         print(f"\n[Query Transform]\n  Исходный:       {output['original_query']}")
         print(f"  Преобразованный: {output['transformed_query']}")
 
-        print("\nРелевантные статьи:\n")
-        for r in output["results"]:
-            print("-" * 80)
-            print(f"{r['article']}")
-            print(f"Score: {r['score']:.4f}")
-            print(f"Chunk: {r['text'][:400]}")
-            print()
+        #print("\nРелевантные статьи:\n")
+        #for r in output["results"]:
+        #    print("-" * 80)
+        #    print(f"{r['article']}")
+        #    print(f"Score: {r['score']:.4f}")
+        #    print(f"Chunk: {r['text'][:400]}")
+        #    print()
 
         prompt = build_prompt(output["original_query"], output["results"])
         answer = ask_llm(prompt)
         print("\n" + "-" * 80 + "\n")
         print("Ответ LLM:")
         print(answer)
-
-if __name__ == "__main__":
-    main()

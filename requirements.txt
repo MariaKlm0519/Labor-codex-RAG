@@ -1,0 +1,7 @@
+python-docx
+numpy
+sentence-transformers
+groq
+rank-bm25
+python-dotenv
+python-telegram-bot

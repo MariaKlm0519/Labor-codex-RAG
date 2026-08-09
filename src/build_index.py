@@ -90,11 +90,6 @@ def split_hierarchy(text: str, level: str = "document", max_chunk_len: int = CHU
 
 
 def extract_between(text: str, pattern: str) -> List[Dict]:
-    """
-    Находит все заголовки по паттерну и возвращает список:
-    [{"title": "Глава 1 ...", "body": "Текст до следующей главы"},]
-    """
-    # Ищем все заголовки с их позициями
     matches = []
     for m in re.finditer(pattern, text, re.MULTILINE):
         matches.append({
@@ -152,7 +147,7 @@ def embed_texts(texts: List[str], model) -> np.ndarray:
     return embeddings
 
 
-def main():
+def build_index():
     if os.path.exists(INDEX_PATH):
         logger.info("Найден индекс")
         return
@@ -172,7 +167,3 @@ def main():
         pickle.dump({"chunks": chunks, "embeddings": embeddings}, f)
 
     logger.info(f"Индекс сохранен: {INDEX_PATH}")
-
-
-if __name__ == "__main__":
-    main()

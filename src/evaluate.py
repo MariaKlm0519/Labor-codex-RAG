@@ -70,12 +70,12 @@ def evaluate(codex: CodexRag, k: int = 5, use_transform: bool = True) -> None:
     print(f"MRR @{k}: {mrr:.4f}")
     print(f"{'=' * 70}\n")
 
-def main() -> None:
+def get_acc() -> None:
     print("Загрузка модели и индекса...")
     codex = CodexRag()
 
     evaluate(codex, k=5, use_transform=False)
     evaluate(codex, k=5, use_transform=True)
 
-if __name__ == "__main__":
-    main()
+if __name__ == '__main__':
+    get_acc()

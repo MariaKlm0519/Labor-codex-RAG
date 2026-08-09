@@ -1,5 +1,6 @@
 from dotenv import load_dotenv
 import os
+from pathlib import Path
 
 load_dotenv()
 
@@ -10,8 +11,10 @@ HF_TOKEN = os.environ["HF_TOKEN"]
 EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large"
 GROQ_MODEL    = "llama-3.1-8b-instant"
 
-INDEX_PATH = "../data/processed/tk_index.pkl"
-DOCX_PATH = "../data/raw/Working_K.docx"
-TEST_PATH = "../test/questions.json"
+PROJECT_ROOT = Path(__file__).parent.parent
+
+INDEX_PATH = PROJECT_ROOT / "data" / "processed" / "tk_index.pkl"
+DOCX_PATH = PROJECT_ROOT / "data" / "raw" / "Working_K.docx"
+TEST_PATH = PROJECT_ROOT / "test" / "questions.json"
 
 CHUNK_MAX_LEN = 1024
